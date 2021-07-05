@@ -1,4 +1,13 @@
 
+const temperature = document.querySelectorAll('.temp');
+const icon = document.querySelectorAll('.description');
+const humidity = document.querySelectorAll(".humidity");
+const windSpeed = document.querySelectorAll(".windSpeed");
+const tempMax = document.querySelectorAll(".tempMax");
+const tempMin = document.querySelectorAll(".tempMin");
+const dayTemp = document.querySelectorAll(".day-temp");
+const nightTemp = document.querySelectorAll(".night-temp");
+
 
 document.querySelector('.searchButton').addEventListener('click', getForecast);
 document.querySelector('.searchTerm').addEventListener('keypress', function (e) {
@@ -10,12 +19,7 @@ function  getForecast  ()  {
 
     let input  = document.querySelector('.searchTerm');
     let cityName = input.value.toLowerCase();
-    const temperature = document.querySelectorAll('.temp');
-    const icon = document.querySelectorAll('.description');
-    const humidity = document.querySelectorAll(".humidity");
-    const windSpeed = document.querySelectorAll(".windSpeed");
-    const tempMax = document.querySelectorAll(".tempMax");
-    const tempMin = document.querySelectorAll(".tempMin");
+
     const bg = document.querySelector("body");
     let cityNotFound = document.querySelector(".cityNotFound");
     bg.style.backgroundImage = `url(https://source.unsplash.com/featured/?${cityName.trim()})`;
@@ -41,15 +45,15 @@ function  getForecast  ()  {
                 let daysDate = [];
                 datas.map((e,i)=>{
                     let allDays = new Date(e.dt * 1000).getDay();
-                    let allDates = new Date(e.dt * 1000).getDate();
+                    let allDates = new Date(e.dt*1000).getDate();
+
                     daysDay.push(allDays);
                     daysDate.push(allDates);
-                })
+                });
                 let tempResDates = new Set(daysDate);
                 let tempResDays2 = new Set (daysDay);
                 let restDays = Array.from(tempResDays2)
                 let dates = Array.from(tempResDates)
-                console.log(restDays);
                 console.log(dates);
 
                 getWeekDaysboxes = () => {
@@ -66,113 +70,113 @@ function  getForecast  ()  {
                 }
                 getWeekDaysboxes();
 
+                let  makeAverage= (p)=> Math.round(p.reduce((a,c)=>a+c)/4);
+                let makeAverforAll =(p)=> Math.round(p.reduce((a,c)=>a+c)/8);
 
-                let today = new Date().getDate();
-                console.log(today);
-
-                let day0Temp = [];
-                let day0WindSpeed = [];
-                let day0TempMax = [];
-                let day0TempMin = [];
-                let day0Humidity = [];
-
-                let day1Temp = [];
-                let day1WindSpeed = [];
-                let day1TempMax = [];
-                let day1TempMin = [];
-                let day1Humidity = [];
-
-                let day2Temp = [];
-                let day2WindSpeed = [];
-                let day2TempMax = [];
-                let day2TempMin = [];
-                let day2Humidity = [];
-
-                let day3Temp = [];
-                let day3WindSpeed = [];
-                let day3TempMax = [];
-                let day3TempMin = [];
-                let day3Humidity = [];
-
-                let day4Temp = [];
-                let day4WindSpeed = [];
-                let day4TempMax = [];
-                let day4TempMin = [];
-                let day4Humidity = [];
-
-                console.log(day0WindSpeed)
-                let average = (arr)=>{
-                    return arr.reduce((a,b)=> a+b,0)/arr.length;
+                function getDayWeather(p){
+                    let  temperatures = datas.filter((e,i)=>{
+                        let allDays = new Date(e.dt * 1000).getDate();
+                        return (allDays ===dates[p])
+                    }).map((e,i)=>{
+                        if(new Date(e.dt *1000).getHours() > 6 && new Date(e.dt *1000).getHours()< 18){
+                            return  e.main.temp;
+                        }
+                    }).filter(e=>e);
+                    return temperatures;
                 }
-                console.log(data.list[8].wind.speed)
-                console.log(restDays);
-                let restDaysAll = datas.map((e,i)=>{
-                    let allDays = new Date(e.dt * 1000).getDate();
-                    if(allDays ===dates[0]){
-                        day0Temp.push(e.main.temp);
-                        day0WindSpeed.push(e.wind.speed);
-                        day0TempMax.push(e.main.temp_max);
-                        day0TempMin.push(e.main.temp_min);
-                        day0Humidity.push(e.main.humidity);
-                    }
-                    if( allDays === dates[1]){
-                        day1Temp.push(e.main.temp);
-                        day1WindSpeed.push(e.wind.speed);
-                        day1TempMax.push(e.main.temp_max);
-                        day1TempMin.push(e.main.temp_min);
-                        day1Humidity.push(e.main.humidity);
-                    } else if(allDays === dates[2]){
-                        day2Temp.push(e.main.temp);
-                        day2Humidity.push(e.main.humidity);
-                        day2WindSpeed.push(e.speed);
-                        day2TempMax.push(e.main.temp_max);
-                        day2TempMin.push(e.main.temp_min);
-                    }else if(allDays === dates[3]){
-                        day3Temp.push(e.main.temp);
-                        day3WindSpeed.push(e.wind.speed);
-                        day3Humidity.push(e.main.humidity);
-                        day3TempMax.push(e.main.temp_max);
-                        day3TempMin.push(e.main.temp_min);
-                    }else if(allDays === dates[4]){
-                        day4Temp.push(e.main.temp);
-                        day4WindSpeed.push(e.wind.speed);
-                        day4Humidity.push(e.main.humidity);
-                        day4TempMax.push(e.main.temp_max);
-                        day4TempMin.push(e.main.temp_min);
-                    }
-                })
+                function getNightWeather(p){
+                    let  temperatures = datas.filter((e,i)=>{
+                        let allDays = new Date(e.dt * 1000).getDate();
+                        return (allDays === dates[p])
+                    }).map((e,i)=>{
+                        if(new Date(e.dt *1000).getHours() > 18 || new Date(e.dt *1000).getHours()< 6){
+                            return  e.main.temp;
+                        }
+                    }).filter(e=>e);
+                    return temperatures;
+                }
+                function getHumidity(p){
+                    let  humidities = datas.filter((e,i)=>{
+                        let allDays = new Date(e.dt * 1000).getDate();
+                        return (allDays === dates[p])
+                    }).map((e,i)=>e.main.humidity)
+                    return humidities;
+                }
+                function getWindSpeed(p){
+                    let  speeds = datas.filter((e,i)=>{
+                        let allDays = new Date(e.dt * 1000).getDate();
+                        return (allDays === dates[p])
+                    }).map((e,i)=> e.wind.speed);
+                    return speeds;
+                }
+                function getTempMax(p){
+                    let  temp_max = datas.filter((e,i)=>{
+                        let allDays = new Date(e.dt * 1000).getDate();
+                        return (allDays === dates[p])
+                    }).map((e,i)=> e.main.temp_max);
+                    return temp_max;
+                }
+                function getTempMin (p){
+                    let  temp_mins= datas.filter((e,i)=>{
+                        let allDays = new Date(e.dt * 1000).getDate();
+                        return (allDays === dates[p])
+                    }).map((e,i)=> e.main.temp_min);
+                    return temp_mins;
+                }
 
-                temperature[0].innerHTML = Math.round(average(day0Temp)) +'&degC';
-                humidity[0].innerHTML = 'Humidity: ' + Math.round(average(day0Humidity)) +'%';
-                windSpeed[0].innerHTML =  `Wind speed: ${Math.round(average(day0WindSpeed))}`;
-                tempMax[0].innerHTML = 'Temp max expected: ' + Math.ceil(Math.max(...day0TempMin))  +'&degC';
-                tempMin[0].innerHTML = 'Temp min expected:'+ Math.floor(Math.min(...day0TempMin))  +'&degC';
-
-                temperature[1].innerHTML = Math.round(average(day1Temp)) + '&degC';
-                humidity[1].innerHTML = 'Humidity: ' + Math.round(average(day1Humidity));
-                windSpeed[1].innerHTM = 'Wind speed ' + Math.round(average(day1WindSpeed));
-                tempMax[1].innerHTML = 'Temp max: ' + Math.ceil(Math.max(...day1TempMin))  +'&degC';
-                tempMin[1].innerHTML = 'Temp min:'+ Math.floor(Math.min(...day1TempMin))  +'&degC';
-
-                temperature[2].innerHTML = Math.round(average(day2Temp)) +'&degC';
-                humidity[2].innerHTML = 'Humidity: '  + Math.round(average(day2Humidity)) +'%';
-                windSpeed[2].innerHTM = 'Wind speed ' + Math.round(average(day2WindSpeed));
-                tempMax[2].innerHTML = 'Temp max: ' + Math.ceil(Math.max(...day2TempMin))  +'&degC';
-                tempMin[2].innerHTML = 'Temp min:'+ Math.floor(Math.min(...day2TempMin))  +'&degC';
-
-                temperature[3].innerHTML = Math.round(average(day3Temp)) +'&degC';
-                humidity[3].innerHTML = 'Humidity: ' +  Math.round(average(day3Humidity)) +'%';
-                windSpeed[3].innerHTM = 'Wind speed '+  Math.round(average(day3WindSpeed));
-                tempMax[3].innerHTML = 'Temp max: ' +  Math.ceil(Math.max(...day3TempMin))  +'&degC';
-                tempMin[3].innerHTML = 'Temp min:'+ Math.floor(Math.min(...day3TempMin))  +'&degC';
-
-                temperature[4].innerHTML = Math.round(average(day4Temp)) +'&degC';
-                humidity[4].innerHTML = 'Humidity: '  + Math.round(average(day4Humidity)) +'%';
-                windSpeed[4].innerHTML = 'Wind speed ' + Math.round(average(day4WindSpeed));
-                tempMax[4].innerHTML = 'Temp max: ' + Math.ceil(Math.max(...day4TempMin))  +'&degC';
-                tempMin[4].innerHTML = 'Temp min:'+ Math.floor(Math.min(...day4TempMin))  +'&degC';
+                let allDayTemps = [ makeAverage(getDayWeather(1)), makeAverage(getDayWeather(2)),makeAverage(getDayWeather(3)), makeAverage(getDayWeather(4)) ];
+                let allNightTemps = [makeAverage(getNightWeather(1)),makeAverage(getNightWeather(2)), makeAverage(getNightWeather(3)),makeAverage(getNightWeather(4))];
+                let allHumdities = [makeAverforAll(getHumidity(1)), makeAverforAll(getHumidity(2)), makeAverforAll(getHumidity(3)), makeAverforAll(getHumidity(4))];
+                let windSpeeds = [makeAverforAll(getWindSpeed(1)), makeAverforAll(getWindSpeed(2)), makeAverforAll(getWindSpeed(3)), makeAverforAll(getWindSpeed(4))];
+                let tempsMax =[Math.ceil(Math.max(...getTempMax(1))), Math.ceil(Math.max(...getTempMax(2))),Math.ceil(Math.max(...getTempMax(3))),Math.ceil(Math.max(...getTempMax(4)))];
+                let tempsMin = [Math.floor(Math.min(...getTempMin(1))), Math.floor(Math.min(...getTempMin(2))), Math.floor(Math.min(...getTempMin(3))), Math.floor(Math.min(...getTempMin(4)))]
 
 
+                for(let i = 1; i < 5 ; i++){
+                    temperature[i].innerHTML = allDayTemps[i-1] +'&degC';
+                    humidity[i].innerHTML = 'Humidity: ' + allHumdities[i-1] +'%';
+                    windSpeed[i].innerHTML =  `Wind speed: ${windSpeeds[i-1]}`;
+                    tempMax[i].innerHTML = 'Temp max expected: ' + tempsMax[i-1]  +'&degC';
+                    tempMin[i].innerHTML = 'Temp min expected: '+ tempsMin[i-1] +'&degC';
+                }
+
+
+
+                function getWeatherforToday (cityName){
+                    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=87baafad9a4fb7eed5550969f5ab2bd3`)
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            if(data.cod === "404"){
+                                cityNotFound.style.display = "block"
+                            }
+                            else{
+                                temperature[0].innerHTML = Math.round(data.main.temp) +'&degC';
+                                humidity[0].innerHTML = 'Humidity: ' + data.main.humidity +'%';
+                                windSpeed[0].innerHTML =  `Wind speed: ${data.wind.speed}`;
+                                tempMax[0].innerHTML = 'Temp max expected: ' + Math.round(data.main.temp_max)  +'&degC';
+                                tempMin[0].innerHTML = 'Temp min expected: '+ Math.round(data.main.temp_min)  +'&degC';
+
+
+                                dayTemp.forEach((e,i)=>{
+                                    e.addEventListener("click", function (){
+                                        temperature[i + 1].innerHTML =allDayTemps[i] +'&degC';
+                                    })
+                                })
+                                nightTemp.forEach((e,i)=>{
+                                    e.addEventListener("click", function(){
+                                        console.log(allNightTemps[i]);
+
+                                        temperature[i + 1].innerHTML = allNightTemps[i] +'&degC' // TODO night for today
+                                    })
+                                })
+
+                            }
+                        })
+                }
+                getWeatherforToday(cityName);
+                // TODO get correct icons
                 icon.forEach((e,i)=>{
                     icon[i].innerHTML =  `<img src="http://openweathermap.org/img/wn/${data.list[i*8].weather[0]['icon']}@2x.png" width="60" height="60">`;
                 })
