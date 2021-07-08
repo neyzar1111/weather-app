@@ -11,6 +11,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tinos&display=swap" rel="stylesheet">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
     <title>Document</title>
 </head>
 
@@ -30,7 +35,7 @@
 
     <div class="container-wrap">
 
-        <div class="mainblock content">
+        <div class="animate__animated animate__fadeIn mainblock content">
 
             <div class="weather">
                 <p class="cityName hs">Brussels</p>
@@ -49,7 +54,7 @@
         </div>
     </div>
     <div class="container-wrap">
-        <div class="mainblock content">
+        <div class="animate__animated animate__fadeIn mainblock content">
             <div class="buttons">
                 <button class="day-temp">Day</button>
                 <button class="night-temp">Night</button>
@@ -71,7 +76,7 @@
         </div>
     </div>
     <div class="container-wrap">
-        <div class="mainblock content">
+        <div class="animate__animated animate__fadeIn mainblock content">
             <div class="buttons">
                 <button class="day-temp">Day</button>
                 <button class="night-temp">Night</button>
@@ -93,7 +98,7 @@
         </div>
     </div>
     <div class="container-wrap">
-        <div class="mainblock content">
+        <div class="animate__animated animate__fadeIn mainblock content">
             <div class="buttons">
                 <button class="day-temp">Day</button>
                 <button class="night-temp">Night</button>
@@ -115,7 +120,7 @@
         </div>
     </div>
     <div class="container-wrap">
-        <div class="mainblock ">
+        <div class="animate__animated animate__fadeIn mainblock ">
             <div class="buttons">
                 <button class="day-temp">Day</button>
                 <button class="night-temp">Night</button>
@@ -140,9 +145,8 @@
 <div class="cityNotFound" style="display: none" >
     <p>City not found :(</p>
 </div>
-<!--<script src="js/list.js"></script>-->
-<script src="js/script.js"></script>
-<!--<script src="js/weatherforecast.js"></script>-->
+<!--<script type="module" src="js/modules/calculateDates.js"></script>-->
+<script type="module" src="js/script.js"></script>
 </body>
 
 </html>
